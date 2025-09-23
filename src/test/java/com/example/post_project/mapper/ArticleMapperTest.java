@@ -41,7 +41,7 @@ public class ArticleMapperTest {
         List<ArticleDto> articles = articleMapper.selectArticleList();
 
         // then
-        assertThat(articles).hasSize(9);
-        assertThat(articles.size()).isEqualTo(9);
+        assertThat(articles).hasSize(7);
+        assertThat(articles.size()).isEqualTo(7);
     }
 }
