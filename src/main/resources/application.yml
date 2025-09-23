@@ -1,0 +1,25 @@
+server:
+  port: 9000
+
+
+spring:
+  application:
+    name: post-project
+  # DB 연결 정보
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db_board?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: react
+    password: Mysql1234!!
+    
+# MyBatis 설정 정보
+mybatis:  
+  mapper-locations: classpath:/mapper/**/*.xml
+  type-aliases-package: com.example.post_project.dto
+
+# 로그
+logging:
+  level:
+    com.example.post_project.mapper: DEBUG
+    org.mybatis: DEBUG
+    org.springframework.jdbc.core: DEBUG
