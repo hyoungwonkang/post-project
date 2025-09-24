@@ -15,8 +15,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+
+
 
 
 
@@ -24,10 +29,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 // @ResponseBody + @Controller
 @RestController
 @RequestMapping("/api/v1")
-@RequiredArgsConstructor // 빈 컨테이너 검색 후 레퍼런스 전달하여 의존성 주입
+@RequiredArgsConstructor // Bean 컨테이너 검색 후 레퍼런스 전달하여 의존성 주입
 public class ArticleController {
     // field
     private final ArticleService articleService;
+
+    @PutMapping("/articles/{id}")
+    public ResponseEntity<String> updateArticle(@PathVariable(value = "id") int id, @RequestBody ArticleDto article) {
+        
+        article.setId(id);
+        articleService.modifyArticleDto(article);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
+    }
+
+
+    @GetMapping("/articles/{id}")
+    public ResponseEntity<ArticleDto> getArticle(@PathVariable(value = "id") int id){
+        ArticleDto article = articleService.retrieveArticle(id);
+
+        return ResponseEntity.ok().body(article);
+    }
+    
 
     @PostMapping("/articles")
     public ResponseEntity<Map<String, Integer>> postArticle(@RequestBody ArticleDto article) {

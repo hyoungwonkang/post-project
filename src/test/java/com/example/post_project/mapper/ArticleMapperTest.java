@@ -18,6 +18,52 @@ public class ArticleMapperTest {
     private ArticleMapper articleMapper;
 
     @Test
+    void testUpdateArticle() {
+        // given
+        ArticleDto articleDto = ArticleDto.builder()
+            .title("제목 테스트")
+            .contents("내용 테스트")
+            .writer("작성자 테스트")
+            .build();
+
+        articleMapper.insertArticle(articleDto);
+
+        ArticleDto articleDto1 = ArticleDto.builder()
+            .id(articleDto.getId())
+            .title("제목 수정 테스트")
+            .contents("내용 수정 테스트")
+            .writer("작성자 수정 테스트")
+            .build();
+
+        // when
+        articleMapper.updateArticle(articleDto1);
+
+        // then
+        assertThat(articleDto.getTitle()).isEqualTo(articleDto1.getTitle());
+        assertThat(articleDto.getContents()).isEqualTo(articleDto1.getContents());
+    }
+
+    @Test
+    void testSelectArticleById() {
+        // given
+        ArticleDto articleDto = ArticleDto.builder()
+            .title("제목 테스트1")
+            .contents("내용 테스트1")
+            .writer("작성자 테스트1")
+            .build();
+        articleMapper.insertArticle(articleDto);
+
+        int id = articleDto.getId();
+
+        // when
+        articleMapper.selectArticleById(id);
+
+        // then
+        assertThat(articleDto.getContents()).isNotNull();
+
+    }
+
+    @Test
     void testInsertArticle() {
         // given
         ArticleDto articleDto = ArticleDto.builder()

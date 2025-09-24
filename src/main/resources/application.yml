@@ -11,6 +11,8 @@ spring:
     url: jdbc:mysql://localhost:3306/db_board?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: react
     password: Mysql1234!!
+  hikari:
+    connection-timeout: 20000  # 커넥션 풀에서 사용 가능한 커넥션을 기다리는 최대 시간(20초)
     
 # MyBatis 설정 정보
 mybatis:  

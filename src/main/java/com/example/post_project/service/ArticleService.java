@@ -5,16 +5,31 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.post_project.dto.ArticleDto;
+import com.example.post_project.exception.ArticleNotFoundException;
 import com.example.post_project.mapper.ArticleMapper;
 
 import lombok.RequiredArgsConstructor;
 
 @Service // (스테레오타입 애너테이션) 비즈니스 로직을 처리하는 클래스를 정의하는데 사용
-@RequiredArgsConstructor // 빈 컨테이너 검색 후 레퍼런스 전달하여 의존성 주입
+@RequiredArgsConstructor // Bean 컨테이너 검색 후 레퍼런스 전달하여 의존성 주입
 // 원래는 인터페이스로 만드나, 코드가 너무 간단하여 클래스로 만듦
 public class ArticleService {
     // field
     private final ArticleMapper articleMapper;
+
+    // 게시글 수정
+    public void modifyArticleDto(ArticleDto article) {
+        articleMapper.updateArticle(article);
+    }
+    
+    // 게시글 상세 조회
+    public ArticleDto retrieveArticle(int id) {
+        ArticleDto article = articleMapper.selectArticleById(id);
+        if (article == null) {
+            throw new ArticleNotFoundException();
+        }
+        return article;
+    }
 
     // 게시글 등록
     public int createArticle(ArticleDto article) {
