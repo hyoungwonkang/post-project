@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.post_project.dto.ArticleDto;
+import com.example.post_project.dto.Criteria;
 import com.example.post_project.service.ArticleService;
 
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,20 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class ArticleController {
     // field
     private final ArticleService articleService;
+
+    // 검색 조건에 해당하는 게시글 목록 조회
+    // /api/v1/articles?keyfield=writer&keyword=Alice
+    @GetMapping("/articles")
+    public ResponseEntity<List<ArticleDto>> getArticle(
+        @RequestParam(value = "keyfield", required = false, defaultValue = "") String keyfield,
+        @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword) {
+
+        System.out.println("keyfield: " + keyfield + ", keyword: " + keyword);
+
+        List<ArticleDto> articles = articleService.findArticleList(new Criteria(keyfield, keyword));
+        return ResponseEntity.ok().body(articles);
+    }
+    
 
     @DeleteMapping("/articles/{id}")
     public ResponseEntity<String> deleteArticle(@PathVariable(value = "id") int id) {
@@ -67,13 +82,13 @@ public class ArticleController {
     }
     
 
-    @GetMapping("/articles")
-    public ResponseEntity<List<ArticleDto>> getArticles() {
+    // @GetMapping("/articles")
+    // public ResponseEntity<List<ArticleDto>> getArticles() {
 
-        List<ArticleDto> articles = articleService.retrieveArticleList();
+    //     List<ArticleDto> articles = articleService.retrieveArticleList();
 
-        return ResponseEntity.ok().body(articles); // builder pattern
-        // return new ResponseEntity<>(articles, HttpStatus.OK);
-    }
+    //     return ResponseEntity.ok().body(articles); // builder pattern
+    //     // return new ResponseEntity<>(articles, HttpStatus.OK);
+    // }
     
 }

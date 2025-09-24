@@ -57,7 +57,6 @@ public class ArticleMapperTest {
             .build();
 
         // when
-
         articleMapper.updateArticle(articleDto1);
 
         // then

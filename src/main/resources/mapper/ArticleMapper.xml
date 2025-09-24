@@ -5,6 +5,32 @@
 
 <mapper namespace="com.example.post_project.mapper.ArticleMapper">
 
+  <select id="findArticleList" parameterType="Criteria" resultType="ArticleDto">
+    SELECT
+        id,
+        title,
+        contents,
+        writer,
+        reg_date AS regDate
+    FROM article
+    <if test="keyfield != '' and keyword != ''">
+      <trim prefix="WHERE">
+        <choose>
+          <when test="keyfield == 'writer'">
+            writer LIKE CONCAT('%', #{keyword} ,'%')
+          </when>
+          <when test="keyfield == 'title'">
+            title LIKE CONCAT('%', #{keyword} ,'%')
+          </when>
+          <when test="keyfield == 'contents'">
+            contents LIKE CONCAT('%', #{keyword} ,'%')
+          </when>
+        </choose>
+      </trim>
+    </if>
+    ORDER BY id DESC
+  </select>
+
   <delete id="deleteArticle" parameterType="int">
     DELETE FROM article
     WHERE id = #{id}

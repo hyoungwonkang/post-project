@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.post_project.dto.ArticleDto;
+import com.example.post_project.dto.Criteria;
 import com.example.post_project.exception.ArticleNotFoundException;
 import com.example.post_project.mapper.ArticleMapper;
 
@@ -16,6 +17,11 @@ import lombok.RequiredArgsConstructor;
 public class ArticleService {
     // field
     private final ArticleMapper articleMapper;
+
+    // 게시글 검색
+    public List<ArticleDto> findArticleList(Criteria criteria) {
+        return articleMapper.findArticleList(criteria);
+    }
 
     // 게시글 삭제
     public void removeArticle(int id) {
