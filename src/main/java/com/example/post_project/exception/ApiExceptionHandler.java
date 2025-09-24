@@ -10,12 +10,12 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(HttpServletRequest req, Exception ex) {
         return handleException(req, ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(value = ArticleNotFoundException.class)
+    @ExceptionHandler(ArticleNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleException(HttpServletRequest req, ArticleNotFoundException ex) {
         return handleException(req, ex, HttpStatus.BAD_REQUEST);
     }

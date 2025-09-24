@@ -41,7 +41,7 @@ public class ArticleService {
     public ArticleDto retrieveArticle(int id) {
         ArticleDto article = articleMapper.selectArticleById(id);
         if (article == null) {
-            throw new ArticleNotFoundException(id + "번 게시글을 찾을 수 없습니다.");
+            throw new ArticleNotFoundException();
         }
         return article;
     }

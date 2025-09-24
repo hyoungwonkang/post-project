@@ -58,10 +58,11 @@ public class ArticleMapperTest {
 
         // when
         articleMapper.updateArticle(articleDto1);
+        ArticleDto updatedArticle = articleMapper.selectArticleById(articleDto.getId());
 
         // then
-        assertThat(articleDto.getTitle()).isEqualTo(articleDto1.getTitle());
-        assertThat(articleDto.getContents()).isEqualTo(articleDto1.getContents());
+        assertThat(updatedArticle.getTitle()).isEqualTo(articleDto1.getTitle());
+        assertThat(updatedArticle.getContents()).isEqualTo(articleDto1.getContents());
     }
 
     // 상세 조회
