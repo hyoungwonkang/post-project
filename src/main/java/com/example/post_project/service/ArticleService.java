@@ -17,6 +17,15 @@ public class ArticleService {
     // field
     private final ArticleMapper articleMapper;
 
+    // 게시글 삭제
+    public void removeArticle(int id) {
+        ArticleDto article = articleMapper.selectArticleById(id);
+        if (article == null) {
+            throw new ArticleNotFoundException(id + "번 게시글을 찾을 수 없습니다.");
+        }
+        articleMapper.deleteArticle(id);
+    }
+
     // 게시글 수정
     public void modifyArticleDto(ArticleDto article) {
         articleMapper.updateArticle(article);
@@ -26,7 +35,7 @@ public class ArticleService {
     public ArticleDto retrieveArticle(int id) {
         ArticleDto article = articleMapper.selectArticleById(id);
         if (article == null) {
-            throw new ArticleNotFoundException();
+            throw new ArticleNotFoundException(id + "번 게시글을 찾을 수 없습니다.");
         }
         return article;
     }

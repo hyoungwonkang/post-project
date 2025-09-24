@@ -17,6 +17,27 @@ public class ArticleMapperTest {
     @Autowired
     private ArticleMapper articleMapper;
 
+    // 삭제
+    @Test
+    void testRemoveArticle() {
+        // given
+        ArticleDto articleDto = ArticleDto.builder()
+            .title("제목 테스트")
+            .contents("내용 테스트")
+            .writer("작성자 테스트")
+            .build();
+
+        articleMapper.insertArticle(articleDto);
+
+        // when
+        articleMapper.deleteArticle(articleDto.getId());
+        ArticleDto foundArticle = articleMapper.selectArticleById(articleDto.getId());
+
+        // then
+        assertThat(foundArticle).isNull();
+    }
+
+    // 수정
     @Test
     void testUpdateArticle() {
         // given
@@ -36,6 +57,7 @@ public class ArticleMapperTest {
             .build();
 
         // when
+
         articleMapper.updateArticle(articleDto1);
 
         // then
@@ -43,6 +65,7 @@ public class ArticleMapperTest {
         assertThat(articleDto.getContents()).isEqualTo(articleDto1.getContents());
     }
 
+    // 상세 조회
     @Test
     void testSelectArticleById() {
         // given
@@ -63,6 +86,7 @@ public class ArticleMapperTest {
 
     }
 
+    // 등록
     @Test
     void testInsertArticle() {
         // given
@@ -79,6 +103,7 @@ public class ArticleMapperTest {
         assertThat(articleDto.getId()).isEqualTo(20);
     }
 
+    // 전체 조회
     @Test
     void testSelectArticleList() {
         // given
