@@ -25,6 +25,9 @@ repositories {
 }
 
 dependencies {
+	// thumbnailator
+	implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.20'
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	// mybatis
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'

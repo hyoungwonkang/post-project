@@ -3,6 +3,8 @@
 package com.example.post_project.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -18,4 +20,7 @@ public class ArticleDto {
     private String writer;
     private String contents;
     private LocalDateTime regDate;
+
+    // Article 1 : N ArticleFile
+    List<ArticleFileDto> files = new ArrayList<>();
 }

@@ -2,6 +2,7 @@ package com.example.post_project.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.post_project.dto.ArticleDto;
 import com.example.post_project.dto.Criteria;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.PutMapping;
 
 
@@ -35,6 +37,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class ArticleController {
     // field
     private final ArticleService articleService;
+
+    // 게시글 등록2
+    @PostMapping("/articles")
+    public ResponseEntity<Map<String, Integer>> postArticle(
+        @RequestPart(value = "article") ArticleDto article,
+        @RequestPart(value = "files") List<MultipartFile> files) {
+        
+        int id = articleService.createArticle(article, files);
+        return ResponseEntity.ok().body(Map.of("id", id));
+    }
 
     // 검색 조건에 해당하는 게시글 목록 조회
     // /api/v1/articles?keyfield=writer&keyword=Alice
@@ -74,12 +86,12 @@ public class ArticleController {
         return ResponseEntity.ok().body(article);
     }
     
-
-    @PostMapping("/articles")
-    public ResponseEntity<Map<String, Integer>> postArticle(@RequestBody ArticleDto article) {
-        int id = articleService.createArticle(article);
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("id", id));
-    }
+    // // 게시글 등록
+    // @PostMapping("/articles")
+    // public ResponseEntity<Map<String, Integer>> postArticle(@RequestBody ArticleDto article) {
+    //     int id = articleService.createArticle(article);
+    //     return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("id", id));
+    // }
     
 
     // @GetMapping("/articles")

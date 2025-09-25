@@ -13,7 +13,19 @@ spring:
     password: Mysql1234!!
   hikari:
     connection-timeout: 20000  # 커넥션 풀에서 사용 가능한 커넥션을 기다리는 최대 시간(20초)
-    
+
+  # 파일 업로드 설정
+  servlet:
+    multipart:
+      max-request-size: 30MB  # 클라이언트가 여러 파일을 어보드할때 요청의 총 크기가 30MB 초과 안됨
+      max-file-size: 30MB     # 개별 업로드 파일의 최대 크기
+      location: /tmp/upload   # 임시 디렉토리
+
+# 업로드 파일의 저장 경로
+file:
+  upload:
+    path: upload # ./upload
+
 # MyBatis 설정 정보
 mybatis:  
   mapper-locations: classpath:/mapper/**/*.xml

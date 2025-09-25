@@ -3,11 +3,15 @@ package com.example.post_project.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.post_project.dto.ArticleDto;
+import com.example.post_project.dto.ArticleFileDto;
 import com.example.post_project.dto.Criteria;
 import com.example.post_project.exception.ArticleNotFoundException;
+import com.example.post_project.mapper.ArticleFileMapper;
 import com.example.post_project.mapper.ArticleMapper;
+import com.example.post_project.util.FileUploadUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +21,23 @@ import lombok.RequiredArgsConstructor;
 public class ArticleService {
     // field
     private final ArticleMapper articleMapper;
+    private final ArticleFileMapper articleFileMapper;
+    private final FileUploadUtils fileUploadUtils;
+
+    // 게시글 등록
+    public int createArticle(ArticleDto article, List<MultipartFile> files) {
+        articleMapper.insertArticle(article);
+        int articleId = article.getId();
+
+        List<ArticleFileDto> articleFiles = fileUploadUtils.uploadFiles(files);
+
+        if (articleFiles != null) {
+        articleFiles.forEach(file -> file.setArticleId(articleId));
+        articleFileMapper.insertArticleFile(articleFiles);
+        }
+        
+        return articleId;
+    }
 
     // 게시글 검색
     public List<ArticleDto> findArticleList(Criteria criteria) {
