@@ -92,7 +92,6 @@
       <result column="userEmail" property="email" />
       <result column="userPhone" property="phone" />
     </association>
-
   </resultMap>
 
 
@@ -107,22 +106,14 @@
         F.file_name AS fileName,
         F.file_size AS fileSize,
         F.file_path AS filePath,
-        F.article_id AS articleId
-    FROM article AS A
-    LEFT OUTER JOIN article_file AS F
-    ON A.id = F.article_id
-    WHERE A.id = #{id}
-  </select>
-
-  <select id="selectArticleById" parameterType="int" resultType="selectArticleByIdResultMap">
-    SELECT
-        A.id AS id,
+        F.article_id AS articleId,
         U.id AS userId,
         U.email AS userEmail,
-        U.phone AS userPhone
+        U.phone AS userPhone,
+        U.article_id AS articleId
     FROM article AS A
-    LEFT OUTER JOIN user AS U
-    ON A.id = U.article_id
+    LEFT OUTER JOIN article_file AS F ON A.id = F.article_id
+    INNER JOIN user AS U ON A.writer = U.id
     WHERE A.id = #{id}
   </select>
 </mapper>
