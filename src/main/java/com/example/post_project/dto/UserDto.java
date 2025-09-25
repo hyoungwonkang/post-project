@@ -6,14 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Builder
-@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArticleFileDto {
+@Builder
+@Getter @Setter
+public class UserDto {
     private int id;
-    private String fileName;
-    private String filePath;
-    private long fileSize;
-    private int articleId;
+    private String email;
+    private String phone;
 }

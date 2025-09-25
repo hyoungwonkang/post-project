@@ -87,7 +87,14 @@
       <result column="filePath" property="filePath" />
       <result column="articleId" property="articleId" />
     </collection>
+    <association property="user" javaType="UserDto">
+      <id column="userId" property="id" />
+      <result column="userEmail" property="email" />
+      <result column="userPhone" property="phone" />
+    </association>
+
   </resultMap>
+
 
   <select id="selectArticleById" parameterType="int" resultMap="selectArticleByIdResultMap">
     SELECT
@@ -104,6 +111,18 @@
     FROM article AS A
     LEFT OUTER JOIN article_file AS F
     ON A.id = F.article_id
+    WHERE A.id = #{id}
+  </select>
+
+  <select id="selectArticleById" parameterType="int" resultType="selectArticleByIdResultMap">
+    SELECT
+        A.id AS id,
+        U.id AS userId,
+        U.email AS userEmail,
+        U.phone AS userPhone
+    FROM article AS A
+    LEFT OUTER JOIN user AS U
+    ON A.id = U.article_id
     WHERE A.id = #{id}
   </select>
 </mapper>
