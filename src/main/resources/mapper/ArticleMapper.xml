@@ -63,7 +63,7 @@
     ORDER BY id DESC
   </select>
 
-  <select id="selectArticleById" parameterType="int" resultType="ArticleDto">
+  <!-- <select id="selectArticleById" parameterType="int" resultType="ArticleDto">
     SELECT
       id,
       title,
@@ -72,5 +72,38 @@
       reg_date AS regDate
     FROM article
     WHERE id = #{id}
+  </select> -->
+
+  <resultMap id="selectArticleByIdResultMap" type="ArticleDto">
+    <id column="id" property="id" />
+    <result column="title" property="title" />
+    <result column="contents" property="contents" />
+    <result column="writer" property="writer" />
+    <result column="regDate" property="regDate" />
+    <collection property="files" ofType="ArticleFileDto">
+      <id column="fileId" property="id" />
+      <result column="fileName" property="fileName" />
+      <result column="fileSize" property="fileSize" />
+      <result column="filePath" property="filePath" />
+      <result column="articleId" property="articleId" />
+    </collection>
+  </resultMap>
+
+  <select id="selectArticleById" parameterType="int" resultMap="selectArticleByIdResultMap">
+    SELECT
+        A.id AS id,
+        A.writer AS writer,
+        A.contents AS contents,
+        A.title AS title,
+        A.reg_date AS regDate,
+        F.id AS fileId,
+        F.file_name AS fileName,
+        F.file_size AS fileSize,
+        F.file_path AS filePath,
+        F.article_id AS articleId
+    FROM article AS A
+    LEFT OUTER JOIN article_file AS F
+    ON A.id = F.article_id
+    WHERE A.id = #{id}
   </select>
 </mapper>
