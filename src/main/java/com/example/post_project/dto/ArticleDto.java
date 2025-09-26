@@ -26,7 +26,7 @@ public class ArticleDto {
     private LocalDateTime regDate;
 
     // Article 1 : N ArticleFile
-    List<ArticleFileDto> files = new ArrayList<>();
+    private List<ArticleFileDto> files = new ArrayList<>();
 
     // Article 1 : 1 User
     private UserDto user;

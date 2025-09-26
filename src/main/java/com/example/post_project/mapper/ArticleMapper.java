@@ -8,7 +8,7 @@ import com.example.post_project.dto.ArticleDto;
 import com.example.post_project.dto.Criteria;
 
 // Mapper interface
-// SQL 매핑 : XML 또는 Annotations에 정의된 SQL 구문을 메서드와 매핑
+// [마이바티스 프레임워크 애너테이션]SQL 매핑 : XML 또는 Annotations에 정의된 SQL 구문을 메서드와 매핑
 @Mapper
 public interface ArticleMapper {
 
