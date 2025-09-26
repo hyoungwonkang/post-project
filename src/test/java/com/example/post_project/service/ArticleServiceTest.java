@@ -41,6 +41,7 @@ public class ArticleServiceTest {
     }
 
      @Test
+     // 인위적으로 익셉션을 내도록 쿼리문 수정해야함: article_file -> article_file1
     void testRetrieveArticle1() {
 
         // given
