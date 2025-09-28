@@ -35,10 +35,10 @@ public class ArticleService {
         List<ArticleFileDto> articleFiles = fileUploadUtils.uploadFiles(files);
 
         if (articleFiles != null) {
-        articleFiles.forEach(file -> file.setArticleId(articleId));
-        articleFileMapper.insertArticleFile(articleFiles);
+            articleFiles.forEach(file -> file.setArticleId(articleId));
+            articleFileMapper.insertArticleFile(articleFiles);
         }
-        
+
         return articleId;
     }
 
