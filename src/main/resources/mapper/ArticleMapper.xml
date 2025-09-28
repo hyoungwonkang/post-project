@@ -5,30 +5,77 @@
 
 <mapper namespace="com.example.post_project.mapper.ArticleMapper">
 
-  <select id="findArticleList" parameterType="Criteria" resultType="ArticleDto">
+  <resultMap id="selectArticleByIdResultMap" type="ArticleDto">
+    <id column="id" property="id" />
+    <result column="title" property="title" />
+    <result column="contents" property="contents" />
+    <result column="writer" property="writer" />
+    <result column="regDate" property="regDate" />
+    <association property="user" javaType="UserDto">
+      <id column="user_Id" property="id" />
+      <result column="email" property="email" />
+      <result column="phone" property="phone" />
+    </association>
+    <collection property="files" ofType="ArticleFileDto">
+      <id column="fileId" property="id" />
+      <result column="fileName" property="fileName" />
+      <result column="fileSize" property="fileSize" />
+      <result column="filePath" property="filePath" />
+      <result column="articleId" property="articleId" />
+    </collection>
+  </resultMap>
+
+  <select id="findArticleList" parameterType="Criteria" resultMap="selectArticleByIdResultMap">
     SELECT
-        id,
-        title,
-        contents,
-        writer,
-        reg_date AS regDate
-    FROM article
+        A.id,
+        A.title,
+        A.contents,
+        A.writer,
+        A.reg_date AS regDate,
+        F.id AS fileId,
+        F.file_name AS fileName,
+        F.file_size AS fileSize,
+        F.file_path AS filePath,
+        F.article_id AS articleId
+    FROM article A
+    LEFT OUTER JOIN article_file F ON F.article_id = A.id
     <if test="keyfield != '' and keyword != ''">
       <trim prefix="WHERE">
         <choose>
           <when test="keyfield == 'writer'">
-            writer LIKE CONCAT('%', #{keyword} ,'%')
+            A.writer LIKE CONCAT('%', #{keyword} ,'%')
           </when>
           <when test="keyfield == 'title'">
-            title LIKE CONCAT('%', #{keyword} ,'%')
+            A.title LIKE CONCAT('%', #{keyword} ,'%')
           </when>
           <when test="keyfield == 'contents'">
-            contents LIKE CONCAT('%', #{keyword} ,'%')
+            A.contents LIKE CONCAT('%', #{keyword} ,'%')
           </when>
         </choose>
       </trim>
     </if>
-    ORDER BY id DESC
+    ORDER BY A.id DESC
+  </select>
+  
+  <select id="selectArticleById" parameterType="int" resultMap="selectArticleByIdResultMap">
+    SELECT
+        A.id AS id,
+        A.writer AS writer,
+        A.contents AS contents,
+        A.title AS title,
+        A.reg_date AS regDate,
+        U.id AS user_Id,
+        U.email AS email,
+        U.phone AS phone,
+        F.id AS fileId,
+        F.file_name AS fileName,
+        F.file_size AS fileSize,
+        F.file_path AS filePath,
+        F.article_id AS articleId
+    FROM article AS A
+    INNER JOIN users AS U ON A.user_id = U.id
+    LEFT OUTER JOIN article_file AS F ON F.article_id = A.id
+    WHERE A.id = #{id}
   </select>
 
   <delete id="deleteArticle" parameterType="int">
@@ -52,7 +99,7 @@
 
   </insert>
   
-  <select id="selectArticleList" resultType="ArticleDto">
+  <!-- <select id="selectArticleList" resultType="ArticleDto">
     SELECT
         id,
         title,
@@ -61,7 +108,7 @@
         reg_date AS regDate
     FROM article
     ORDER BY id DESC
-  </select>
+  </select> -->
 
   <!-- <select id="selectArticleById" parameterType="int" resultType="ArticleDto">
     SELECT
@@ -74,45 +121,4 @@
     WHERE id = #{id}
   </select> -->
 
-  <resultMap id="selectArticleByIdResultMap" type="ArticleDto">
-    <id column="id" property="id" />
-    <result column="title" property="title" />
-    <result column="contents" property="contents" />
-    <result column="writer" property="writer" />
-    <result column="regDate" property="regDate" />
-    <association property="user" javaType="UserDto">
-      <id column="user_Id" property="id" />
-      <result column="email" property="email" />
-      <result column="phone" property="phone" />
-    </association>
-    <collection property="files" ofType="ArticleFileDto">
-      <id column="fileId" property="id" />
-      <result column="fileName" property="fileName" />
-      <result column="fileSize" property="fileSize" />
-      <result column="filePath" property="filePath" />
-      <result column="articleId" property="articleId" />
-    </collection>
-  </resultMap>
-
-
-  <select id="selectArticleById" parameterType="int" resultMap="selectArticleByIdResultMap">
-    SELECT
-        A.id AS id,
-        A.writer AS writer,
-        A.contents AS contents,
-        A.title AS title,
-        A.reg_date AS regDate,
-        U.id AS user_Id,
-        U.email AS email,
-        U.phone AS phone,
-        F.id AS fileId,
-        F.file_name AS fileName,
-        F.file_size AS fileSize,
-        F.file_path AS filePath,
-        F.article_id AS articleId
-    FROM article AS A
-    INNER JOIN users AS U ON A.user_id = U.id
-    LEFT OUTER JOIN article_file AS F ON F.article_id = A.id
-    WHERE A.id = #{id}
-  </select>
 </mapper>
