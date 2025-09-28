@@ -40,7 +40,7 @@ public class ArticleController {
     @PostMapping("/articles")
     public ResponseEntity<Map<String, Integer>> postArticle(
         @RequestPart(value = "article") ArticleDto article,
-        @RequestPart(value = "files") List<MultipartFile> files) {
+        @RequestPart(value = "files", required = false) List<MultipartFile> files) {
         
         int id = articleService.createArticle(article, files);
         return ResponseEntity.ok().body(Map.of("id", id));
