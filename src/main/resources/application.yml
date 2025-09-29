@@ -5,6 +5,8 @@ server:
 spring:
   application:
     name: post-project
+  # profiles:
+  #   active: prod
   # DB 연결 정보
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -32,8 +34,10 @@ mybatis:
   type-aliases-package: com.example.post_project.dto
 
 # 로그
-logging:
-  level:
-    com.example.post_project.mapper: DEBUG
-    org.mybatis: DEBUG
-    org.springframework.jdbc.core: DEBUG
+# logging:
+#   level:
+#     root: INFO
+#     com.example.post_project.mapper: DEBUG
+#     org.mybatis: DEBUG
+#     org.springframework.jdbc.core: DEBUG
+

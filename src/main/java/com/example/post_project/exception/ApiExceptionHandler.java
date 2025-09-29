@@ -2,11 +2,14 @@ package com.example.post_project.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
@@ -29,5 +32,29 @@ public class ApiExceptionHandler {
                                     .message(ex.getMessage())
                                     .build();
         return ResponseEntity.ok().body(response);
+    }
+    
+    // exceprtion handler method
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleException(HttpServletRequest req, MethodArgumentNotValidException ex) {
+        
+        log.info("uri: {}, method: {}", req.getRequestURI(), req.getMethod());
+
+        StringBuilder builder = new StringBuilder();
+
+        ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
+            builder.append("[").append(fieldError.getField()).append("] ")
+            .append(fieldError.getDefaultMessage())
+            .append(", Provided value : ")
+            .append(fieldError.getRejectedValue())
+            .append("\n");
+        });
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                                    .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                                    .message(builder.toString())
+                                    .build();
+
+        return ResponseEntity.ok().body(errorResponse);
     }
 }

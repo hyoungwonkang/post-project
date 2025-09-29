@@ -3,6 +3,8 @@ package com.example.post_project.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,7 +29,20 @@ public class ArticleService {
     private final FileUploadUtils fileUploadUtils;
 
     // 게시글 등록
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+    // public int createArticle(ArticleDto article, List<MultipartFile> files) {
+    //     articleMapper.insertArticle(article);
+    //     int articleId = article.getId();
+
+    //     List<ArticleFileDto> articleFiles = fileUploadUtils.uploadFiles(files);
+
+    //     if (articleFiles != null) {
+    //     articleFiles.forEach(file -> file.setArticleId(articleId));
+    //     articleFileMapper.insertArticleFile(articleFiles);
+    //     }
+        
+    //     return articleId;
+    // }
     public int createArticle(ArticleDto article, List<MultipartFile> files) {
         articleMapper.insertArticle(article);
         int articleId = article.getId();

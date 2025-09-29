@@ -8,11 +8,15 @@ import com.example.post_project.dto.ArticleDto;
 import com.example.post_project.dto.Criteria;
 import com.example.post_project.service.ArticleService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,17 +33,22 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 // @ResponseBody + @Controller
+@Slf4j
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor // Bean 컨테이너 검색 후 레퍼런스 전달하여 의존성 주입
 public class ArticleController {
+
+    // Logger : 로그 정보를 생성할 주체
+    // private static Logger log = org.slf4j.LoggerFactory.getLogger(ArticleController.class);
+
     // field
     private final ArticleService articleService;
 
     // 게시글 등록2
     @PostMapping("/articles")
     public ResponseEntity<Map<String, Integer>> postArticle(
-        @RequestPart(value = "article") ArticleDto article,
+        @RequestPart(value = "article") @Valid ArticleDto article,
         @RequestPart(value = "files", required = false) List<MultipartFile> files) {
         
         int id = articleService.createArticle(article, files);
@@ -53,7 +62,7 @@ public class ArticleController {
         @RequestParam(value = "keyfield", required = false, defaultValue = "") String keyfield,
         @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword) {
 
-        System.out.println("keyfield: " + keyfield + ", keyword: " + keyword);
+        log.info("keyfield: {}, keyword: {}", keyfield, keyword);
 
         List<ArticleDto> articles = articleService.findArticleList(new Criteria(keyfield, keyword));
         return ResponseEntity.ok().body(articles);
@@ -62,6 +71,9 @@ public class ArticleController {
 
     @DeleteMapping("/articles/{id}")
     public ResponseEntity<String> deleteArticle(@PathVariable(value = "id") int id) {
+
+        log.info("article id: {}", id);
+
         articleService.removeArticle(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
     }
@@ -80,6 +92,8 @@ public class ArticleController {
     @GetMapping("/articles/{id}")
     public ResponseEntity<ArticleDto> getArticle(@PathVariable(value = "id") int id){
         ArticleDto article = articleService.retrieveArticle(id);
+
+        log.info("========================================article id: {}", id);
 
         return ResponseEntity.ok().body(article);
     }
