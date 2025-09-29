@@ -19,7 +19,7 @@ import com.example.post_project.util.FileUploadUtils;
 import lombok.RequiredArgsConstructor;
 
 @Service // (스테레오타입 애너테이션) 비즈니스 로직을 처리하는 클래스를 정의하는데 사용
-@Transactional(readOnly = true)
+@Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRES_NEW) // 트랜잭션 설정: 기본값은 readOnly = true
 @RequiredArgsConstructor // Bean 컨테이너 검색 후 레퍼런스 전달하여 의존성 주입
 // 원래는 인터페이스로 만드나, 코드가 너무 간단하여 클래스로 만듦
 public class ArticleService {

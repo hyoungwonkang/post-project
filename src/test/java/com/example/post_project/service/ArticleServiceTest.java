@@ -4,11 +4,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.post_project.dto.ArticleDto;
 import com.example.post_project.exception.ArticleNotFoundException;
 
 import static org.assertj.core.api.Assertions.*;
+
 
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -16,7 +19,7 @@ public class ArticleServiceTest {
 
     @Autowired
     private ArticleService articleService;
-    
+
     @Test
     void testRetrieveArticle() {
 
@@ -52,5 +55,22 @@ public class ArticleServiceTest {
             ArticleDto articleDto = articleService.retrieveArticle(id);
         }).isInstanceOf(ArticleNotFoundException.class)
             .hasMessage(id + "번 게시글을 찾을 수 없습니다.");
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    void testTransactionPropagation() {
+        // given
+        ArticleDto article = ArticleDto.builder()
+            .title("제목 테스트")
+            .contents("내용 테스트")
+            .writer("작성자 테스트")
+            .build();
+
+        // when
+        int articleId = articleService.createArticle(article);
+        // then
+        assertThat(articleId).isGreaterThan(100);
+        assertThat(articleId).isNotNull();
     }
 }
